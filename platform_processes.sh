@@ -28,6 +28,7 @@ what_os()
         [Mm]"int")
             __return_value="Debian";
             ;;
+            
         "2")
             __return_value="Fedora";
             ;;
@@ -40,6 +41,7 @@ what_os()
         [Cc]"ent"[Oo][Ss])
             __return_value="Fedora";
             ;;
+
         "3")
             __return_value="Arch";
             ;;
