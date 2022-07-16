@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ##########
-# Determine Which OS User is Running by Argument
+# Determine Which OS User is Running, by Argument
 ##########
 what_os()
 {
