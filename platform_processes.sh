@@ -15,17 +15,47 @@ what_os()
     local __return_parameter=$2;
     local __return_value;
 
-    if [ "$parameter_1" = "1" -o "$parameter_1" = "[Dd]ebian" ]
-    then
-        __return_value="Debian";
-    else
-        if [ "$parameter_1" = "2" -o "$parameter_1" = "[Ff]edora" ]
-        then
+    case "$parameter_1" in
+        "1")
+            __return_value="Debian";
+            ;;
+        [Dd]"ebian")
+            __return_value="Debian";
+            ;;
+        [Uu]"buntu")
+            __return_value="Debian";
+            ;;
+        [Mm]"int")
+            __return_value="Debian";
+            ;;
+        "2")
             __return_value="Fedora";
-        else
+            ;;
+        [Ff]"edora")
+            __return_value="Fedora";
+            ;;
+        [Oo]"pen"[Ss][Uu][Ss][Ee])
+            __return_value="Fedora";
+            ;;
+        [Cc]"ent"[Oo][Ss])
+            __return_value="Fedora";
+            ;;
+        "3")
             __return_value="Arch";
-        fi
-    fi
+            ;;
+        [Aa]"rch")
+            __return_value="Arch";
+            ;;
+        [Mm]"anjaro")
+            __return_value="Arch";
+            ;;
+        [Gg]"aruda")
+            __return_value="Arch";
+            ;;
+        *)
+            __return_value="Arch";
+            ;;
+    esac
 
     ##
     # Return
