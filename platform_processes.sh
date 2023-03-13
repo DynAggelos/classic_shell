@@ -1,5 +1,9 @@
 #!/bin/sh
 
+####################
+# OS Functions
+####################
+
 ##########
 # Determine Which OS User is Running, by Argument
 ##########
@@ -100,6 +104,10 @@ what_os_interactive()
     eval $__return_parameter="'$__return_value'";
 }
 
+####################
+# Super User Functions
+####################
+
 ##########
 # Determine If User Can sudo
 ##########
@@ -165,3 +173,129 @@ can_su()
     ##
     eval $__return_parameter="'$__return_value'";
 }
+
+##########
+# Run Command as Superuser
+##########
+superuser()
+{
+    ##
+    # Definitions
+    ##
+    # Parameters
+    local parameter_1="$1";
+    
+    local superuser_command;
+    local can_user_sudo;
+    local can_user_su;
+
+    # Check for su Installation
+    can_sudo can_user_sudo;
+
+    if [ "$can_user_sudo" -eq '1' ]
+    then
+        eval sudo "$parameter_1";
+    else
+        can_su can_user_su;
+
+        if [ "$can_user_su" -eq '1' ]
+        then
+            if [ ! `whoami` -eq 'root' ]
+            then
+                # Change to Root
+                su -;
+            fi
+
+            eval "$parameter_1";
+        else
+            echo "Cannot execute commands as root.";
+
+            exit;
+        fi
+    fi
+}
+
+####################
+# Input Sanitization
+####################
+
+##########
+# Basic Sanitization of User Input
+#----
+# Parameter 1 = User Input
+# Parameter 2 = Data Type
+##########
+#sanitize_input()
+#{
+    ##
+    # Definitions
+    ##
+    # Parameters
+#    local __return_parameter=$1;
+#    local __return_value;
+#    local parameter_2="$2";
+
+#    local __commands_available=`compgen -c`;
+
+    ##
+    #
+    ##
+#    if [ "$parameter_2" -eq "number" ]
+#    then
+#        __return_parameter=`echo "$__return_parameter" | grep -Eox -m 1 '[0-9]{1,100}'`;
+#    else
+#        if [ "$parameter_2" -eq "string" ]
+#        then
+#            for i in $__commands_available
+#            do
+#                __return_parameter=`echo "$__return_parameter" | sed -E s/"(\ ?($i)\ ?){0,10}"//`;
+#            done
+#        else
+#            if [ "$parameter_2" -eq "anything" ]
+#            then
+#                1
+                # Anything is Possible, Including Commands
+#            fi
+#        fi
+#    fi
+
+    ##
+    # Return
+    ##
+#    eval $__return_parameter="'$__return_value'";
+#}
+
+##########
+# DO NOT USE, UNSAFE TO DEPEND ON!!!
+# Basic Sanitization of User Input
+#----
+# Parameter 1 = User Input
+# Parameter 2 = Data Type
+##########
+#remove_commands()
+#{
+    ##
+    # Definitions
+    ##
+    # Parameters
+#    local __return_parameter=$1;
+#    local __return_value;
+
+    # Note: Source from https://unix.stackexchange.com/a/120870
+#    local __commands_available=`{ IFS=:; ls -H $PATH; }`
+
+#    __commands_available=`echo "$__commands_available" | sed -E s/"[_\-\\]"/&/`;
+
+#    echo $__commands_available;
+
+    ##
+    # Remove All Known Commands from
+    ##
+    #for i in $__commands_available
+    #do
+        #__return_parameter=`echo "$__return_parameter" | sed -E s/"(\ ?($i)\ ?){0,10}"//`;
+    #    echo "$__return_parameter" | sed -E s/"(\ ?($i)\ ?){0,10}"//;
+    #done
+
+    #echo $__return_parameter | sed -E s/"(\ ?($i)\ ?){0,10}"//`;
+#}
