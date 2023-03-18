@@ -2,7 +2,7 @@
 A library of helper files for simplifying every-day tasks in shell scripts. Each file is focused on categories of common tasks, and can be included as needed.
 
 ## File List
-Classes found in Classic.php include:
+Files found in Classic.sh include:
 
 * platform_processes.sh -- Provides platform-focused tasks, such as seeing if the user can sudo, or determining which GNU/Linux OS is being run.
 
