@@ -122,7 +122,7 @@ can_sudo()
     local sudo_installed;
 
     # Check for sudo Installation
-    sudo_installed=`apt search sudo 2> /dev/null | sed -e s/'sudo[^0-9a-z\-].*\[installed.*'/'sudo installed'/ | grep -o 'sudo installed'`;
+    sudo_installed=$(apt search sudo 2> /dev/null | sed -e s/'sudo[^0-9a-z\-].*\[installed.*'/'sudo installed'/ | grep -o 'sudo installed');
 
     if [ "$sudo_installed" != "" ]
     then
@@ -159,7 +159,7 @@ can_su()
     local su_installed;
 
     # Check for su Installation
-    su_installed=`apt search util-linux 2> /dev/null | sed -e s/'util-linux[^0-9a-z\-].*\[installed.*'/'su installed'/ | grep -o 'su installed'`;
+    su_installed=$(apt search util-linux 2> /dev/null | sed -e s/'util-linux[^0-9a-z\-].*\[installed.*'/'su installed'/ | grep -o 'su installed');
 
     if [ "$su_installed" != "" ]
     then
@@ -200,7 +200,7 @@ superuser()
 
         if [ "$can_user_su" -eq '1' ]
         then
-            if [ ! `whoami` -eq 'root' ]
+            if [ ! "$(whoami)" = 'root' ]
             then
                 # Change to Root
                 su -;
