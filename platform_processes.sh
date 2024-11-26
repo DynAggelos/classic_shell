@@ -16,7 +16,6 @@ what_os()
     local parameter_1=$1;
 
     # Return Parameter
-    local __return_parameter=$2;
     local __return_value;
 
     case "$parameter_1" in
@@ -66,7 +65,7 @@ what_os()
     ##
     # Return
     ##
-    eval $__return_parameter="'$__return_value'";
+    echo "$__return_value";
 }
 
 ##########
@@ -78,7 +77,6 @@ what_os_interactive()
     # Definition
     ##
     # Return Parameter
-    local __return_parameter=$1;
     local __return_value;
 
     # Variables
@@ -116,7 +114,6 @@ can_sudo()
     ##
     # Definitions
     ##
-    local __return_parameter=$1;
     local __return_value;
 
     local sudo_installed;
@@ -142,7 +139,7 @@ can_sudo()
     ##
     # Return
     ##
-    eval $__return_parameter="'$__return_value'";
+    echo "$__return_value";
 }
 
 ##########
@@ -153,7 +150,6 @@ can_su()
     ##
     # Definitions
     ##
-    local __return_parameter=$1;
     local __return_value;
 
     local su_installed;
@@ -171,7 +167,7 @@ can_su()
     ##
     # Return
     ##
-    eval $__return_parameter="'$__return_value'";
+    echo "$__return_value";
 }
 
 ##########
