@@ -4,119 +4,20 @@
 # OS Functions
 ####################
 
-##########
-# Determine Which OS User is Running, by Argument
-##########
-what_os()
-{
-    ##
-    # Definition
-    ##
-    # Parameters
-    local parameter_1=$1;
-
-    # Return Parameter
-    local __return_value;
-
-    case "$parameter_1" in
-        "1")
-            __return_value="Debian";
-            ;;
-        [Dd]"ebian")
-            __return_value="Debian";
-            ;;
-        [Uu]"buntu")
-            __return_value="Debian";
-            ;;
-        [Mm]"int")
-            __return_value="Debian";
-            ;;
-            
-        "2")
-            __return_value="Fedora";
-            ;;
-        [Ff]"edora")
-            __return_value="Fedora";
-            ;;
-        [Oo]"pen"[Ss][Uu][Ss][Ee])
-            __return_value="Fedora";
-            ;;
-        [Cc]"ent"[Oo][Ss])
-            __return_value="Fedora";
-            ;;
-
-        "3")
-            __return_value="Arch";
-            ;;
-        [Aa]"rch")
-            __return_value="Arch";
-            ;;
-        [Mm]"anjaro")
-            __return_value="Arch";
-            ;;
-        [Gg]"aruda")
-            __return_value="Arch";
-            ;;
-        *)
-            __return_value="Arch";
-            ;;
-    esac
-
-    ##
-    # Return
-    ##
-    echo "$__return_value";
-}
-
-##########
-# Determine Which OS User is Running, Interactively
-##########
-what_os_interactive()
-{
-    ##
-    # Definition
-    ##
-    # Return Parameter
-    local __return_value;
-
-    # Variables
-    local choice
-    local true_choice
-
-    echo "What operating system are you running? (This is so we can use commands that will work with your operating system.)";
-    echo "1. Debian and Debian-Based OS (Debian, Ubuntu, Mint, Etc.)";
-    echo "2. Fedora and Fedora-Based OS (Fedora, OpenSUSE, CentOS, Etc.)";
-    echo "3. Arch and Arch-Based OS (Arch, Manjaro, Garuda Etc.)";
-
-    read choice;
-
-    echo;
-
-    what_os $choice true_choice;
-
-    __return_value=$true_choice
-
-    ##
-    # Return
-    ##
-    eval $__return_parameter="'$__return_value'";
-}
-
 ####################
 # Super User Functions
 ####################
 
 ##########
-# Determine If User Can sudo
+# Can Sudo: Determines If User Can sudo. Requires typing in the User's Authentication Password
 ##########
 can_sudo()
 {
     ##
     # Definitions
     ##
-    local __return_value;
-
     local sudo_installed;
+    local return_value;
 
     # Check for sudo Installation
     sudo_installed=$(apt search sudo 2> /dev/null | sed -e s/'sudo[^0-9a-z\-].*\[installed.*'/'sudo installed'/ | grep -o 'sudo installed');
@@ -126,52 +27,51 @@ can_sudo()
         # Determine If User Can sudo
         sudo --validate > /dev/null 2>&1;
 
-        __return_value=$?;
+        return_value=$?;
 
-        if [ "$__return_value" -lt 1 ]
+        if [ "$return_value" -lt 1 ]
         then
-            __return_value=1;
+            return_value=1;
         else
-            __return_value=0;
+            return_value=0;
         fi
     fi
 
     ##
     # Return
     ##
-    echo "$__return_value";
+    echo "$return_value";
 }
 
 ##########
-# Determine If User Can su
+# Can Su: Determines If User Can su
 ##########
 can_su()
 {
     ##
     # Definitions
     ##
-    local __return_value;
-
     local su_installed;
+    local return_value;
 
     # Check for su Installation
     su_installed=$(apt search util-linux 2> /dev/null | sed -e s/'util-linux[^0-9a-z\-].*\[installed.*'/'su installed'/ | grep -o 'su installed');
 
     if [ "$su_installed" != "" ]
     then
-        __return_value=1;
+        return_value=1;
     else
-        __return_value=0;
+        return_value=0;
     fi
 
     ##
     # Return
     ##
-    echo "$__return_value";
+    echo "$return_value";
 }
 
 ##########
-# Run Command as Superuser
+# Superuser: Runs a command as the super user.
 ##########
 superuser()
 {
@@ -179,9 +79,8 @@ superuser()
     # Definitions
     ##
     # Parameters
-    local parameter_1="$1";
+    local __parameter_1="$1";
     
-    local superuser_command;
     local can_user_sudo;
     local can_user_su;
 
@@ -190,25 +89,61 @@ superuser()
 
     if [ "$can_user_sudo" -eq '1' ]
     then
-        eval sudo "$parameter_1";
+
+        eval sudo "$__parameter_1";
     else
+
         can_su can_user_su;
 
         if [ "$can_user_su" -eq '1' ]
         then
+
             if [ ! "$(whoami)" = 'root' ]
             then
+
                 # Change to Root
                 su -;
             fi
 
-            eval "$parameter_1";
+            eval "$__parameter_1";
         else
+
             echo "Cannot execute commands as root.";
 
             exit;
         fi
     fi
+}
+
+##########
+# Kill User: Kills all user processes. Will not kill the root user.
+##########
+kill_user()
+{
+    ##
+    # Definitions
+    ##
+    # Parameters
+    local __user_to_logout=$1;
+
+    # Variables
+    local return_value;
+
+    # Check for sudo Installation
+    if [ "$__user_to_logout" != 'root' ]
+    then
+        superuser "pkill -KILL -u $__user_to_logout";
+
+        return_value=1;
+    else
+
+        return_value=0;
+    fi
+
+    ##
+    # Return
+    ##
+    echo "$return_value";
 }
 
 ####################
