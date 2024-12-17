@@ -85,7 +85,7 @@ superuser()
     local can_user_su;
 
     # Check for su Installation
-    can_sudo can_user_sudo;
+    can_user_sudo=$(can_sudo);
 
     if [ "$can_user_sudo" -eq '1' ]
     then
@@ -93,7 +93,7 @@ superuser()
         eval sudo "$__parameter_1";
     else
 
-        can_su can_user_su;
+        can_user_su=$(can_su);
 
         if [ "$can_user_su" -eq '1' ]
         then

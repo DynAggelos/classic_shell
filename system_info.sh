@@ -1,6 +1,36 @@
 #!/bin/sh
 
 ##########
+# Is Package Installed: Determines if a package is installed on your system
+##########
+is_package_installed()
+{
+
+    ##
+    # Definitions
+    ##
+    # Parameters
+    local __program=$1;
+
+    # Variables
+    local program_location;
+    local return_value=0;
+
+    program_location=$(which "$__program");
+
+    if [ "$program_location" != '' ]
+    then
+
+        return_value=1;
+    fi
+
+    ##
+    # Return
+    ##
+    echo "$return_value";
+}
+
+##########
 # Which Distro: Determines which Linux distribution the user is using
 ##########
 which_distro()
@@ -274,6 +304,11 @@ which_distro()
 which_distro_family()
 {
 
+    ##
+    # Definitions
+    ##
+    local return_value;
+    
     return_value=$(which_distro 'true');
 
     ##
